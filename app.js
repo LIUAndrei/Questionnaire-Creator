@@ -31,6 +31,10 @@
               
        ]
 
+// below is the empty array of new questions that will be filled out by the user
+
+       let userQuestionsList = [];
+
 // below are the system and error messages list
 
        const systemMessages = {
@@ -54,17 +58,68 @@
 
        const questionsPopulator = function(arry) {
               for (let i = 0; i < arry.length; i++) {
+
+
                      let section = document.createElement('section');
                      section.classList.add('questions__container');
                      questionsGoHere.appendChild(section);
+
                      let header = document.createElement('h3');
                      header.classList.add('questions__title');
                      header.textContent = arry[i]['question'];
                      section.appendChild(header);
+
+                     let questionsGridder = document.createElement('div');
+                     questionsGridder.classList.add('questions__gridder');
+                     section.appendChild(questionsGridder);
+
+                     for (let j = 0; j < arry[i]['answers'].length; j++) {
+
+                            let arrayOfAnswers = arry[i]['answers'];
+
+                            let questionsCheckboxContainer = document.createElement('div');
+                            questionsCheckboxContainer.classList.add('questions__checkbox-container');
+                            questionsGridder.appendChild(questionsCheckboxContainer);
+
+                            let checkbox = document.createElement('input');
+                            checkbox.classList.add('questions__checkbox');
+                            checkbox.type = 'checkbox';
+                            checkbox.disabled = true;
+                            questionsCheckboxContainer.appendChild(checkbox);
+
+                            let questionsAnswerContainer = document.createElement('div');
+                            questionsAnswerContainer.classList.add('questions__answer-container');
+                            questionsGridder.appendChild(questionsAnswerContainer);
+
+                            let questionsAnswer = document.createElement('p');
+                            questionsAnswer.classList.add('questions__answer');
+                            questionsAnswer.textContent = arrayOfAnswers[j];
+                            questionsAnswerContainer.appendChild(questionsAnswer);
+                     }
               }
        }
 
 // below questionsPopulator function is called for the default questions
 
-  //     questionsPopulator(defaultQuestions);
+       questionsPopulator(defaultQuestions);
+
+// below is a function that engages and populates the modal window 
+       // function should be provided with a title, message(false if none), and whether a textarea shoul be displayed(true or false)
+
+       const modalWindow = function(title, message, textInput) {
+              
+              
+       }
+
+
+// below is the function that hides-shows the modal window
+
+       let modalVisibility = function() {
+              document.getElementById('modal').classList.toggle('hidden');
+       }
+
+// below is an event handler for the 'add a question button'
+
+       const addAQuestionButton = document.getElementById('add-a-question');
+       addAQuestionButton.addEventListener('click', modalVisibility);
 

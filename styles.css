@@ -8,6 +8,10 @@ body {
     background-color: E2E2EE;
 }
 
+.hidden {
+    display: none !important;
+}
+
 div.narrow_down_container {
     margin-left: auto;
     margin-right: auto;
@@ -53,12 +57,14 @@ div.main__placement {
 }
 
 section.questions__container:nth-of-type(2n) {
-    back
+    background-color: rgba(0,0,0,0.2);
+}
 
+section.questions__container {
+    padding: 4px;
 }
 
 div.questions__gridder {
-    outline: solid 1px red;
     display: grid;
     grid-template-columns: 50px auto;
 }
@@ -70,3 +76,52 @@ div.questions__checkbox-container {
     justify-content: center;
 }
 
+footer {
+    padding: 10px 50px; 
+}
+
+div.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.3);
+}
+
+div.modal__window {
+    display: grid;
+    grid-template-rows: 40px auto 40px;
+    padding: 7px;
+    width: 50%;
+    height: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    background-color: #D2EDCA;
+    border-radius: 5px;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.3);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.3);
+}
+
+
+div.modal__header-container {
+    height: 40;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.modal__content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.modal__buttons-container {
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

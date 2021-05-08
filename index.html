@@ -14,8 +14,8 @@
     <div class="narrow_down_container">
         <header>
             <div class="buttons__container buttons">
-                <button class="buttons__btn">Add a question</button>
-                <button class="buttons__btn">Start the quiz</button>
+                <button class="buttons__btn" id="add-a-question">Add a question</button>
+                <button class="buttons__btn" id="start-the-quiz">Start the quiz</button>
             </div>
             <div class="header__container header">
                 <h1>Questionnaire creator</h1>
@@ -24,7 +24,7 @@
         </header>
         <main>
             <div class="main__placement questions" id="questions-go-here">
-                <section class="questions__container">
+                <!-- <section class="questions__container">
                     <h3 class="questions__title">Question #1</h3>
                     <div class="questions__gridder">
                         <div class="questions__checkbox-container">
@@ -33,12 +33,51 @@
                         <div class="questions__answer-container">
                             <p class="questions__answer">answer</p>
                         </div>
+                        <div class="questions__checkbox-container">
+                            <input type="checkbox" class="questions__checkbox">
+                        </div>
+                        <div class="questions__answer-container">
+                            <p class="questions__answer">answer</p>
+                        </div>
+                        <div class="questions__checkbox-container">
+                            <input type="checkbox" class="questions__checkbox">
+                        </div>
+                        <div class="questions__answer-container">
+                            <p class="questions__answer">answer</p>
+                        </div>
+                        <div class="questions__checkbox-container">
+                            <input type="checkbox" class="questions__checkbox">
+                        </div>
+                        <div class="questions__answer-container">
+                            <p class="questions__answer">answer</p>
+                        </div>
                     </div>
-                </section>
+                </section> -->
 
             </div>
         </main>
-        <footer></footer>
+        <footer>
+            <button class="get-tested" disabled>Finish the test</button>
+        </footer>
+    </div>
+
+
+
+    <div class="modal hidden" id="modal">
+        <div class="modal__window">
+            <div class="modal__header-container">
+                <h2 class="modal__header">Header</h2>
+            </div>
+            <div class="modal__content-container">
+                <p class="modal__content">text</p>
+                <textarea name="" id="" cols="60" rows="8" hidden></textarea>
+            </div>
+            <div class="modal__buttons-container">
+                <button class="buttons__btn">OK</button>
+                <button class="buttons__btn">Cancel</button>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>
