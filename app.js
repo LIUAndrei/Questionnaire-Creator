@@ -1,7 +1,7 @@
 // below is the list of default questions 
 
        // correct is the index of the correct answer within the array
-       const defaultQuestions = [
+       let defaultQuestions = [
               {
                      question: 'А и Б сидели на ',
                      answers: ['одной зарплате', 'трубе', 'пособии для безработных', 'жёрдочке'],
@@ -31,9 +31,7 @@
               
        ]
 
-// below is the empty array of new questions that will be filled out by the user
 
-       let userQuestionsList = [];
 
 // below are the system and error messages list
 
@@ -83,8 +81,8 @@
 
                             let checkbox = document.createElement('input');
                             checkbox.classList.add('questions__checkbox');
+                            checkbox.classList.add('checkbox-question-' + i);
                             checkbox.type = 'checkbox';
-                            checkbox.disabled = true;
                             questionsCheckboxContainer.appendChild(checkbox);
 
                             let questionsAnswerContainer = document.createElement('div');
@@ -99,11 +97,12 @@
               }
        }
 
-// below questionsPopulator function is called for the default questions
+// below questionsPopulator function is called for the default questions(disabled by default)
 
-       questionsPopulator(defaultQuestions);
+      // questionsPopulator(defaultQuestions);
 
 // below is a function that engages and populates the modal window 
+
        // function should be provided with a title, message(false if none), and whether a textarea shoul be displayed(true or false)
 
        const modalWindow = function(title, message, textInput) {
@@ -122,4 +121,55 @@
 
        const addAQuestionButton = document.getElementById('add-a-question');
        addAQuestionButton.addEventListener('click', modalVisibility);
+
+// below is an event handler for the 'cancel' button in the modal window
+
+       const cancelButton = document.getElementById('cancel__button');
+       cancelButton.addEventListener('click', modalVisibility);
+
+
+
+// below is a function that handles the quiz start
+
+	const finishTheTestButton = document.getElementById('finish-the-test-button');
+
+	const startTheQuizFunction = function() {
+		addAQuestionButton.disabled = true;
+		finishTheTestButton.disabled = false;
+		console.log('button pressed');
+		questionsPopulator(defaultQuestions);
+		
+	}
+
+// below is the event handler for 'Start the quiz' button
+
+	const startTheQuizButton = document.getElementById('start-the-quiz');
+	startTheQuizButton.addEventListener('click', startTheQuizFunction);	   
+
+// below is a function that wraps up the test and compares the result
+
+	const finishTheTestFunction = function() {
+
+		for (let i = 0; i < defaultQuestions.length; i++) {
+		let checkboxSet = document.querySelectorAll('.checkbox-question-' + i);
+		let checkmarkedBoxes = [];
+
+		for (let j = 0; j < defaultQuestions[i]['answers'].length; j++) {
+			if (checkboxSet[j].checked) {
+				checkmarkedBoxes.push(j);
+			}
+		}
+
+		if (defaultQuestions[i]['correct'] === checkmarkedBoxes) {
+			defaultQuestions[i]['passed'] = true;
+		} else {
+			defaultQuestions[i]['passed'] = false;
+		}
+		}
+		console.log(defaultQuestions);
+	}
+
+// below is the event handler for 'Finish the test' button
+
+	finishTheTestButton.addEventListener('click', finishTheTestFunction);
 
