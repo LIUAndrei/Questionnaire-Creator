@@ -1,0 +1,72 @@
+*, *::after, *::before {
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background-color: E2E2EE;
+}
+
+div.narrow_down_container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1100px;
+    min-height: 100vh;
+    background-color: #D2EDCA;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 400px auto;
+    height: 100px;
+    width: 100%;
+}
+
+div.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 400px;
+    height: 100%;
+}
+
+button.buttons__btn {
+    width: 130px;
+    height: 30px;
+}
+
+div.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+}
+
+div.main__placement {
+    width: 85%;
+    min-height: 300px;
+    padding-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+section.questions__container:nth-of-type(2n) {
+    back
+
+}
+
+div.questions__gridder {
+    outline: solid 1px red;
+    display: grid;
+    grid-template-columns: 50px auto;
+}
+
+div.questions__checkbox-container {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
