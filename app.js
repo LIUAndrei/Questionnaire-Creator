@@ -35,18 +35,28 @@
 
 // below are the system and error messages list
 
+
        const systemMessages = {
+            T1: 'Вы молодец',
+            T2: 'Пропущены ответы',
+            T3: 'Вы неправильно ответили на вопросы:',
               CC1: 'Вы не ввели текст вопроса. Попробуйте добавить вопрос заново.',
               CC2: 'Вы не ввели текст N* варианта ответа. Попробуйте добавить вопрос заново.',
               CC3: 'Вы не ввели правильные варианты ответов. Попробуйте добавить вопрос заново.',
               CC4: 'Все вопросы должны иметь хотя бы один выбранный вариант ответа. Проверьте правильность заполнения.',
-              CC5: 'Ваш результат <количество правильно отвеченных вопросов> из <количество всех вопросов>. Вы молодец!',
+              CC5(amountOfQuestionsPassed) {
+                return 'Ваш результат ' + amountOfQuestionsPassed +' из ' + defaultQuestions.length + ' . Вы молодец!';
+              },
               CC6: 'Поле может содержать только уникальные цифры 1, 2, 3, 4, разделенные запятой. Попробуйте добавить вопрос заново.',
-              // CC7: 'Вы неправильно ответили на вопросы:
-              // <N*>. <Вопрос N>
-              // <M*>. <Вопрос M>
-              // Ваш результат <количество правильно отвеченных вопросов> из <количество всех вопросов>.
-              // *N, *M — номер вопроса.'
+              CC7(amountOfQuestionsPassed, questionsNotPassed) {
+                let questionListToDisplay = '';
+                for (var i = 0; i < questionsNotPassed.length; i++) {
+                    questionListToDisplay = questionListToDisplay + (questionsNotPassed[i]+1) + '. ' + defaultQuestions[questionsNotPassed[i]].question + ' <br> ';
+                }
+                questionListToDisplay = questionListToDisplay + 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + defaultQuestions.length + '. ';
+                return questionListToDisplay;
+              }
+ 
 
        };
 
@@ -105,9 +115,27 @@
 
        // function should be provided with a title, message(false if none), and whether a textarea shoul be displayed(true or false)
 
-       const modalWindow = function(title, message, textInput) {
-              
-              
+       const constructModalWindow = function(title, message, textInput) {
+
+            const modalHeader = document.getElementById('modal__header');
+            modalHeader.textContent = title;
+
+            const modalContent = document.getElementById('modal__content');
+            if (message) {
+                modalContent.textContent = message;
+                modalContent.hidden = false;
+            } else {
+                modalContent.hidden = true;
+            }
+
+            const modalInput = document.getElementById('modal__input');
+            if (textInput) {
+                modalInput.hidden = false;
+            } else {
+                modalInput.hidden = true;
+            }
+
+            
        }
 
 
@@ -136,7 +164,6 @@
 	const startTheQuizFunction = function() {
 		addAQuestionButton.disabled = true;
 		finishTheTestButton.disabled = false;
-		console.log('button pressed');
 		questionsPopulator(defaultQuestions);
 		
 	}
@@ -146,30 +173,62 @@
 	const startTheQuizButton = document.getElementById('start-the-quiz');
 	startTheQuizButton.addEventListener('click', startTheQuizFunction);	   
 
+// below is a function that checks what type of result did the user acheive.
+
+    const determineTheResult = function(someQuestionsUnanswered, amountOfQuestionsPassed, questionsNotPassed) {
+        if (someQuestionsUnanswered) {
+            console.log('есть неотвеченные');
+            constructModalWindow(systemMessages['T2'], systemMessages['CC4'], false);
+            modalVisibility();
+        } else if (amountOfQuestionsPassed === defaultQuestions.length) {
+            console.log('всё правильно');
+            constructModalWindow(systemMessages['T1'], systemMessages.CC5(amountOfQuestionsPassed), false);
+            modalVisibility();
+        } else {
+            constructModalWindow(systemMessages['T3'], systemMessages.CC7(amountOfQuestionsPassed, questionsNotPassed), false);
+            modalVisibility();
+            console.log(questionsNotPassed);
+        }
+    }
+
 // below is a function that wraps up the test and compares the result
 
 	const finishTheTestFunction = function() {
 
+        let amountOfQuestionsPassed = 0;
+        let someQuestionsUnanswered = false;
+        let questionsNotPassed = []
+
+        // below is a part of function that creates arrays of checkboxes that were marked as checked at the time of pressing the 'Finish the test button' 
+
 		for (let i = 0; i < defaultQuestions.length; i++) {
-		let checkboxSet = document.querySelectorAll('.checkbox-question-' + i);
-		let checkmarkedBoxes = [];
+            let checkboxSet = document.querySelectorAll('.checkbox-question-' + i);
+            let checkmarkedBoxes = [];
 
-		for (let j = 0; j < defaultQuestions[i]['answers'].length; j++) {
-			if (checkboxSet[j].checked) {
-				checkmarkedBoxes.push(j);
-			}
-		}
-
-		if (defaultQuestions[i]['correct'] === checkmarkedBoxes) {
-			defaultQuestions[i]['passed'] = true;
-		} else {
-			defaultQuestions[i]['passed'] = false;
-		}
-		}
-		console.log(defaultQuestions);
+            for (let j = 0; j < defaultQuestions[i]['answers'].length; j++) {
+                if (checkboxSet[j].checked) {
+                    checkmarkedBoxes.push(j);
+                }
+            }
+            
+            if (JSON.stringify(defaultQuestions[i]['correct']) === JSON.stringify(checkmarkedBoxes)) {
+                defaultQuestions[i]['passed'] = true;
+                console.log(checkmarkedBoxes + ' = ' + defaultQuestions[i]['correct'] );
+                amountOfQuestionsPassed++;
+            } else if(!checkmarkedBoxes.length) {
+                someQuestionsUnanswered = true;
+                console.log(someQuestionsUnanswered);
+            } else {
+                defaultQuestions[i]['passed'] = false;
+                questionsNotPassed.push(i);
+            }
+            
+        }
+        determineTheResult(someQuestionsUnanswered, amountOfQuestionsPassed, questionsNotPassed);
+		
 	}
 
 // below is the event handler for 'Finish the test' button
 
-	finishTheTestButton.addEventListener('click', finishTheTestFunction);
+	finishTheTestButton.addEventListener('click', finishTheTestFunction); 
 

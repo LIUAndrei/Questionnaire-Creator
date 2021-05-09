@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script> -->
     <script src="app.js" defer></script>
     <title>Questionnaire creator</title>
 </head>
@@ -66,11 +67,11 @@
     <div class="modal hidden" id="modal">
         <div class="modal__window">
             <div class="modal__header-container">
-                <h2 class="modal__header">Header</h2>
+                <h2 class="modal__header" id="modal__header">Header</h2>
             </div>
             <div class="modal__content-container">
-                <p class="modal__content">text</p>
-                <textarea name="" id="" cols="60" rows="8" hidden></textarea>
+                <p class="modal__content" id="modal__content">text</p>
+                <textarea class="modal__input" id="modal__input" name="modal__input" cols="60" rows="8" hidden></textarea>
             </div>
             <div class="modal__buttons-container">
                 <button class="buttons__btn">OK</button>
