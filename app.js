@@ -51,7 +51,7 @@
               CC7(amountOfQuestionsPassed, questionsNotPassed) {
                 let questionListToDisplay = '';
                 for (var i = 0; i < questionsNotPassed.length; i++) {
-                    questionListToDisplay = questionListToDisplay + (questionsNotPassed[i]+1) + '. ' + defaultQuestions[questionsNotPassed[i]].question + ' &#60;br&#62; ';
+                    questionListToDisplay = questionListToDisplay + (questionsNotPassed[i]+1) + '. ' + defaultQuestions[questionsNotPassed[i]].question + ' <br> ';
                 }
                 questionListToDisplay = questionListToDisplay + 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + defaultQuestions.length + '. ';
                 return questionListToDisplay;
@@ -122,7 +122,7 @@
 
             const modalContent = document.getElementById('modal__content');
             if (message) {
-                modalContent.textContent = message;
+                modalContent.innerHTML = message;
                 modalContent.hidden = false;
             } else {
                 modalContent.hidden = true;
