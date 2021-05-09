@@ -8,15 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
     <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script> -->
-    <script src="app.js" defer></script>
     <title>Questionnaire creator</title>
 </head>
 <body>
     <div class="narrow_down_container">
         <header>
             <div class="buttons__container buttons">
-                <button type="button" class="buttons__btn" id="add-a-question">Add a question</button>
-                <button type="button" class="buttons__btn" id="start-the-quiz">Start the quiz</button>
+                <button type="button" class="buttons__btn" id="add-question">Add a question</button>
+                <button type="button" class="buttons__btn" id="start-quiz">Start the quiz</button>
             </div>
             <div class="header__container header">
                 <h1>Questionnaire creator</h1>
@@ -58,7 +57,7 @@
             </div>
         </main>
         <footer>
-            <button type="button" class="get-tested" disabled id="finish-the-test-button">Finish the test</button>
+            <button type="button" class="get-tested" disabled id="finish-test-button">Finish the test</button>
         </footer>
     </div>
 
@@ -80,5 +79,8 @@
         </div>
 
     </div>
+
+    <script src="system-messages.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
