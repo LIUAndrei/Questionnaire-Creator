@@ -51,7 +51,7 @@
               CC7(amountOfQuestionsPassed, questionsNotPassed) {
                 let questionListToDisplay = '';
                 for (var i = 0; i < questionsNotPassed.length; i++) {
-                    questionListToDisplay = questionListToDisplay + (questionsNotPassed[i]+1) + '. ' + defaultQuestions[questionsNotPassed[i]].question + ' <br> ';
+                    questionListToDisplay = questionListToDisplay + (questionsNotPassed[i]+1) + '. ' + defaultQuestions[questionsNotPassed[i]].question + ' &#60;br&#62; ';
                 }
                 questionListToDisplay = questionListToDisplay + 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + defaultQuestions.length + '. ';
                 return questionListToDisplay;
