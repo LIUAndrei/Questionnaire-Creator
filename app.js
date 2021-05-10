@@ -77,13 +77,12 @@ const constructQuestionSections = function (questions) {
     }
 }
 
-// below questionsPopulator function is called for the default questions(disabled by default)
 
-// questionsPopulator(defaultQuestions);
 
-// below is a function that engages and populates the modal window 
+/* below is a function that engages and populates the modal window 
+     function should be provided with a title, message(false if none), and whether a textarea shoul be displayed(true or false) */
 
-// function should be provided with a title, message(false if none), and whether a textarea shoul be displayed(true or false)
+const modalInput = document.getElementById('modal__input');
 
 const constructModalWindow = function (title, message, textInput) {
 
@@ -98,7 +97,7 @@ const constructModalWindow = function (title, message, textInput) {
         modalContent.hidden = true;
     }
 
-    const modalInput = document.getElementById('modal__input');
+    
     if (textInput) {
         modalInput.hidden = false;
     } else {
@@ -111,19 +110,23 @@ const constructModalWindow = function (title, message, textInput) {
 
 // below is the function that hides-shows the modal window
 
-let toggleModalVisibility = function () {
+let toggleModalVisibility = function(okShown) {
     document.getElementById('modal').classList.toggle('hidden');
+    if (!okShown) {
+        okButton.classList.add('hidden');
+    } else {
+        okButton.classList.remove('hidden');
+    }
 }
 
-// below is an event handler for the 'add a question button'
 
-const addQuestionButton = document.getElementById('add-question');
-addQuestionButton.addEventListener('click', toggleModalVisibility);
 
-// below is an event handler for the 'cancel' button in the modal window
+// below is an event handler for the 'cancel' button in the modal window + selection of 'OK' button
 
 const cancelButton = document.getElementById('cancel__button');
 cancelButton.addEventListener('click', toggleModalVisibility);
+
+const okButton = document.getElementById('ok__button');
 
 
 
@@ -133,6 +136,7 @@ const finishTestButton = document.getElementById('finish-test-button');
 
 const startTheQuizFunction = function () {
     addQuestionButton.disabled = true;
+    startQuizButton.disabled = true;
     finishTestButton.disabled = false;
     constructQuestionSections(defaultQuestions);
 
@@ -146,17 +150,18 @@ startQuizButton.addEventListener('click', startTheQuizFunction);
 // below is a function that checks what type of result did the user acheive.
 
 const determineResult = function (someQuestionsUnanswered, amountOfQuestionsPassed, questionsNotPassed) {
+
     if (someQuestionsUnanswered) {
         console.log('есть неотвеченные');
         constructModalWindow(systemMessages['T2'], systemMessages['CC4'], false);
-        toggleModalVisibility();
+        toggleModalVisibility(false);
     } else if (amountOfQuestionsPassed === defaultQuestions.length) {
         console.log('всё правильно');
         constructModalWindow(systemMessages['T1'], systemMessages['CC5'](amountOfQuestionsPassed), false);
-        toggleModalVisibility();
+        toggleModalVisibility(false);
     } else {
         constructModalWindow(systemMessages['T3'], systemMessages['CC7'](amountOfQuestionsPassed, questionsNotPassed), false);
-        toggleModalVisibility();
+        toggleModalVisibility(false);
         console.log(questionsNotPassed);
     }
 }
@@ -201,3 +206,47 @@ const finishTestFunction = function () {
 // below is the event handler for 'Finish the test' button
 
 finishTestButton.addEventListener('click', finishTestFunction);
+
+
+
+
+
+
+
+
+
+                    /* below goes the logic that handles new questions addition including both action and visual logic */
+
+
+// below is the function that generates new questions from the modal window into defaultQuestions array
+
+
+
+newQuestionIndex = defaultQuestions.length;
+
+const addQuestion = function () {
+    console.log(newQuestionIndex);
+    constructModalWindow(systemMessages.T4, false, true);
+    toggleModalVisibility(true);
+    okButton.addEventListener('click', function () {
+        if (!modalInput.value) {
+            constructModalWindow(systemMessages.T5, systemMessages.CC1, false);
+            okButton.classList.add('hidden');
+        } else {
+            defaultQuestions[newQuestionIndex]['question'] = modalInput.value;
+            modalInput.value = '';
+        }
+    })
+    newQuestionIndex++;
+}
+
+
+// below is an event handler for the 'add a question button'
+
+
+
+const addQuestionButton = document.getElementById('add-question');
+addQuestionButton.addEventListener('click', addQuestion);
+
+// below is an event handler for the 'OK' button
+
