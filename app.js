@@ -1,6 +1,9 @@
 // below is the list of default questions 
 
 // correct is the index of the correct answer within the array
+
+let newQuestion = null;
+
 let defaultQuestions = [
     {
         question: 'А и Б сидели на ',
@@ -26,7 +29,7 @@ let defaultQuestions = [
         question: 'In the grim dark future there is only ',
         answers: ['war', 'death', 'destruction', 'all of the above'],
         correct: [0]
-    },
+    }
 
 ]
 
@@ -221,23 +224,20 @@ finishTestButton.addEventListener('click', finishTestFunction);
 // below is the function that generates new questions from the modal window into defaultQuestions array
 
 
-
-newQuestionIndex = defaultQuestions.length;
+let stepNumber;
 
 const addQuestion = function () {
-    console.log(newQuestionIndex);
+    stepNumber = 0;
+    newQuestion = {
+        question: '',
+        answers: [],
+        correct: []
+    }
     constructModalWindow(systemMessages.T4, false, true);
+    modalInput.value = '';
+    modalInput.focus();
     toggleModalVisibility(true);
-    okButton.addEventListener('click', function () {
-        if (!modalInput.value) {
-            constructModalWindow(systemMessages.T5, systemMessages.CC1, false);
-            okButton.classList.add('hidden');
-        } else {
-            defaultQuestions[newQuestionIndex]['question'] = modalInput.value;
-            modalInput.value = '';
-        }
-    })
-    newQuestionIndex++;
+    
 }
 
 
@@ -250,3 +250,74 @@ addQuestionButton.addEventListener('click', addQuestion);
 
 // below is an event handler for the 'OK' button
 
+okButton.addEventListener('click', function () {
+    if (!modalInput.value) {
+        switch (stepNumber) {
+            case 0:
+                constructModalWindow(systemMessages.T5, systemMessages.CC1, false);
+                okButton.classList.add('hidden');
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:                    
+                constructModalWindow(systemMessages.T5, systemMessages.CC2(stepNumber), false);
+                okButton.classList.add('hidden');
+                break;
+            case 5:
+                constructModalWindow(systemMessages.T5, systemMessages.CC3, false);
+                okButton.classList.add('hidden');
+                break;
+        }
+
+        
+    } else {
+        switch (stepNumber) {
+            case 0:
+                newQuestion['question'] = modalInput.value;
+                modalInput.value = '';
+                modalInput.focus();
+                stepNumber++;
+                constructModalWindow(systemMessages.T6(stepNumber), false, true);
+                break;
+            case 1:
+            case 2:
+            case 3:
+                newQuestion.answers[stepNumber - 1] = modalInput.value;
+                modalInput.value = '';
+                modalInput.focus();
+                stepNumber++;
+                constructModalWindow(systemMessages.T6(stepNumber), false, true);
+                break;
+            case 4:
+                newQuestion.answers[stepNumber - 1] = modalInput.value;
+                modalInput.value = '';
+                modalInput.focus();
+                stepNumber++;
+                constructModalWindow(systemMessages.T7, false, true);
+
+                break;
+            case 5:
+                let isCorrectOk = /^([1-4],){1,3}[1-4]$/.test(modalInput.value);
+                if (isCorrectOk) {
+                    newQuestion.correct = modalInput.value.split(',');
+                    newQuestion.correct = newQuestion['correct'].map(function(v) { return Number(v); });
+                    let noRepeatsSet = new Set(newQuestion.correct);
+                    newQuestion.correct = [...noRepeatsSet];
+                    newQuestion.correct = newQuestion['correct'].sort();
+                } else {
+                    constructModalWindow(systemMessages.T5, systemMessages.CC6, false);
+                    okButton.classList.add('hidden');
+                    return;
+                }
+                
+
+                console.log(newQuestion);
+                defaultQuestions.push(newQuestion);
+                toggleModalVisibility(false);
+                break;
+        }
+            
+    }
+    
+})
