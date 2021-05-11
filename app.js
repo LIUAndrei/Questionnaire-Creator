@@ -1,3 +1,12 @@
+/* *************************************************
+    this app was written by Andrei Liubinski as a part of 
+    
+
+
+
+*/
+
+
 // below is the list of default questions 
 
 // correct is the index of the correct answer within the array
@@ -66,15 +75,17 @@ const constructQuestionSections = function (questions) {
             checkbox.classList.add('questions__checkbox');
             checkbox.classList.add('checkbox-question-' + i);
             checkbox.type = 'checkbox';
+            checkbox.id = 'checkbox' + i + j;
             questionsCheckboxContainer.appendChild(checkbox);
 
             let questionsAnswerContainer = document.createElement('div');
             questionsAnswerContainer.classList.add('questions__answer-container');
             questionsGridder.appendChild(questionsAnswerContainer);
 
-            let questionsAnswer = document.createElement('p');
+            let questionsAnswer = document.createElement('label');
             questionsAnswer.classList.add('questions__answer');
             questionsAnswer.textContent = arrayOfAnswers[j];
+            questionsAnswer.setAttribute('for', 'checkbox' + i + j);
             questionsAnswerContainer.appendChild(questionsAnswer);
         }
     }
@@ -278,7 +289,7 @@ okButton.addEventListener('click', function () {
                 modalInput.value = '';
                 modalInput.focus();
                 stepNumber++;
-                constructModalWindow(systemMessages.T6(stepNumber), false, true);
+                constructModalWindow(systemMessages.T6(stepNumber), systemMessages.CC8, true);
                 break;
             case 1:
             case 2:
@@ -287,14 +298,14 @@ okButton.addEventListener('click', function () {
                 modalInput.value = '';
                 modalInput.focus();
                 stepNumber++;
-                constructModalWindow(systemMessages.T6(stepNumber), false, true);
+                constructModalWindow(systemMessages.T6(stepNumber), systemMessages.CC9, true);
                 break;
             case 4:
                 newQuestion.answers[stepNumber - 1] = modalInput.value;
                 modalInput.value = '';
                 modalInput.focus();
                 stepNumber++;
-                constructModalWindow(systemMessages.T7, false, true);
+                constructModalWindow(systemMessages.T7, systemMessages.CC10, true);
 
                 break;
             case 5:
@@ -305,6 +316,9 @@ okButton.addEventListener('click', function () {
                     let noRepeatsSet = new Set(newQuestion.correct);
                     newQuestion.correct = [...noRepeatsSet];
                     newQuestion.correct = newQuestion['correct'].sort();
+                    for (let i = 0; i < newQuestion.correct.length; i++) {
+                        newQuestion.correct[i] = newQuestion.correct[i] - 1;
+                    }
                 } else {
                     constructModalWindow(systemMessages.T5, systemMessages.CC6, false);
                     okButton.classList.add('hidden');

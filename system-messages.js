@@ -12,6 +12,7 @@ const systemMessages = {
         return 'Ведите текст ' + stepNumber + ' варианта ответа';
     },
     T7: 'Введите номера правильных ответов через запятую. Нумерация начинается с 1.',
+    T8: 'Отлично!',
 
     CC1: 'Вы не ввели текст вопроса. Попробуйте добавить вопрос заново.',
     CC2(stepNumber) {
@@ -30,5 +31,9 @@ const systemMessages = {
         }
         questionListToDisplay = questionListToDisplay + 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + defaultQuestions.length + '. ';
         return questionListToDisplay;
-    }
+    
+    },
+    CC8: 'Вы ввели вопрос. Теперь введите 1 вариант ответа.',
+    CC9: 'Вы ввели вариант ответа. Добавьте следующий вариант.',
+    CC10: 'Вы ввели вариант ответа. Добавьте список верных ответов'
 };

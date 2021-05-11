@@ -92,7 +92,7 @@ div.modal {
 div.modal__window {
     display: grid;
     grid-template-rows: 40px auto 40px;
-    padding: 7px;
+    padding: 15px;
     width: 50%;
     height: 50%;
     margin-left: auto;
@@ -111,10 +111,17 @@ div.modal__header-container {
     display: flex;
     justify-content: center;
     align-items: center;
+
+}
+
+h2.modal__header {
+    text-align: center;
 }
 
 div.modal__content-container {
+    padding-top: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
