@@ -152,6 +152,10 @@ div.modal__content-container {
     align-items: center;
 }
 
+textarea.modal__input {
+    padding: 5px;
+}
+
 div.modal__buttons-container {
     height: 40px;
     display: flex;
