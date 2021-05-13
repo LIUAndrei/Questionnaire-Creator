@@ -15,7 +15,7 @@
 
 let newQuestion = null;
 
-let defaultQuestions = [
+let questionSet = [
     {
         question: 'А и Б сидели на ',
         answers: ['одной зарплате', 'трубе', 'пособии для безработных', 'жёрдочке'],
@@ -100,7 +100,7 @@ const constructQuestionSections = function (questions) {
 
 const modalInput = document.getElementById('modal__input');
 
-const constructModalWindow = function (title, message, textInput) {
+const constructModalWindow = function (title, message, textInputShown) {
 
     const modalHeader = document.getElementById('modal__header');
     modalHeader.textContent = title;
@@ -114,7 +114,7 @@ const constructModalWindow = function (title, message, textInput) {
     }
 
     
-    if (textInput) {
+    if (textInputShown) {
         modalInput.hidden = false;
     } else {
         modalInput.hidden = true;
@@ -150,18 +150,18 @@ const okButton = document.getElementById('ok__button');
 
 const finishTestButton = document.getElementById('finish-test-button');
 
-const startTheQuizFunction = function () {
+const startQuiz = function () {
     addQuestionButton.disabled = true;
     startQuizButton.disabled = true;
     finishTestButton.disabled = false;
-    constructQuestionSections(defaultQuestions);
+    constructQuestionSections(questionSet);
 
 }
 
 // 7. below is the event handler for 'Start the quiz' button
 
 const startQuizButton = document.getElementById('start-quiz');
-startQuizButton.addEventListener('click', startTheQuizFunction);
+startQuizButton.addEventListener('click', startQuiz);
 
 // 8. below is a function that checks what type of result did the user acheive.
 
@@ -171,7 +171,7 @@ const determineResult = function (someQuestionsUnanswered, amountOfQuestionsPass
         console.log('есть неотвеченные');
         constructModalWindow(systemMessages['T2'], systemMessages['CC4'], false);
         toggleModalVisibility(false);
-    } else if (amountOfQuestionsPassed === defaultQuestions.length) {
+    } else if (amountOfQuestionsPassed === questionSet.length) {
         console.log('всё правильно');
         constructModalWindow(systemMessages['T1'], systemMessages['CC5'](amountOfQuestionsPassed), false);
         toggleModalVisibility(false);
@@ -192,25 +192,25 @@ const finishTestFunction = function () {
 
     // below is a part of function that creates arrays of checkboxes that were checked at the time of pressing the 'Finish the test button' 
 
-    for (let i = 0; i < defaultQuestions.length; i++) {
+    for (let i = 0; i < questionSet.length; i++) {
         let checkboxSet = document.querySelectorAll('.checkbox-question-' + i);
         let checkmarkedBoxes = [];
 
-        for (let j = 0; j < defaultQuestions[i]['answers'].length; j++) {
+        for (let j = 0; j < questionSet[i]['answers'].length; j++) {
             if (checkboxSet[j].checked) {
                 checkmarkedBoxes.push(j);
             }
         }
 
-        if (JSON.stringify(defaultQuestions[i]['correct']) === JSON.stringify(checkmarkedBoxes)) {
-            defaultQuestions[i]['passed'] = true;
-            console.log(checkmarkedBoxes + ' = ' + defaultQuestions[i]['correct']);
+        if (JSON.stringify(questionSet[i]['correct']) === JSON.stringify(checkmarkedBoxes)) {
+            questionSet[i]['passed'] = true;
+            console.log(checkmarkedBoxes + ' = ' + questionSet[i]['correct']);
             amountOfQuestionsPassed++;
         } else if (!checkmarkedBoxes.length) {
             someQuestionsUnanswered = true;
             console.log(someQuestionsUnanswered);
         } else {
-            defaultQuestions[i]['passed'] = false;
+            questionSet[i]['passed'] = false;
             questionsNotPassed.push(i);
         }
 
@@ -234,7 +234,7 @@ finishTestButton.addEventListener('click', finishTestFunction);
                     /* below goes the logic that handles new questions addition including both action and visual logic */
 
 
-// 11. below is the function that generates new questions from the modal window into defaultQuestions array
+// 11. below is the function that generates new questions from the modal window into questionSet array
 
 
 let stepNumber;
@@ -329,7 +329,7 @@ okButton.addEventListener('click', function () {
                 
 
                 console.log(newQuestion);
-                defaultQuestions.push(newQuestion);
+                questionSet.push(newQuestion);
                 toggleModalVisibility(false);
                 break;
         }
