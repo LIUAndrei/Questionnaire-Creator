@@ -189,6 +189,10 @@ const determineResult = function (someQuestionsUnanswered, amountOfQuestionsPass
 
 // 9. below is a function that wraps up the test and compares the result
 
+const compareTheArrays = function(array1, array2) {
+    return JSON.stringify(array1) === JSON.stringify(array2);
+}
+
 const finishTestFunction = function () {
 
     let amountOfQuestionsPassed = 0;
@@ -207,7 +211,7 @@ const finishTestFunction = function () {
             }
         }
 
-        if (JSON.stringify(questionSet[i]['correct']) === JSON.stringify(checkmarkedBoxes)) {
+        if (compareTheArrays(questionSet[i]['correct'], checkmarkedBoxes)) {
             questionSet[i]['passed'] = true;
             console.log(checkmarkedBoxes + ' = ' + questionSet[i]['correct']);
             amountOfQuestionsPassed++;
@@ -240,7 +244,7 @@ const addQuestion = function () {
         answers: [],
         correct: []
     }
-    constructModalWindow(systemMessages.T4, false, true);
+    constructModalWindow(systemMessages['T4'], false, true);
 
     showModalVisibility(true);
 }
@@ -254,22 +258,37 @@ addQuestionButton.addEventListener('click', addQuestion);
 
 // 13. below is an event handler for the 'OK' button
 
+
+ // 13.1 digits for steps of the function are included in an object to imprive readability of the function
+
+ const STEPS = {
+	ENTER_QUESTION: 0,
+	ENTER_1ST_ANSWER: 1,
+	ENTER_2ND_ANSWER: 2,
+	ENTER_3RD_ANSWER: 3,
+	ENTER_4TH_ANSWER: 4,
+	ENTER_CORRECT_ANSWERS: 5
+}
+
+
+
+
 okButton.addEventListener('click', function () {
     if (!modalInput.value) { // this condition handles empty input field. Depending on the step of the question creation process it will add different notifications from the system messages list
         switch (stepNumber) {
-            case 0:
-                constructModalWindow(systemMessages.T5, systemMessages.CC1, false);
+            case STEPS.ENTER_QUESTION:
+                constructModalWindow(systemMessages['T5'], systemMessages['CC1'], false);
                 okButton.classList.add('hidden');
                 break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:                    
-                constructModalWindow(systemMessages.T5, systemMessages.CC2(stepNumber), false);
+            case STEPS.ENTER_1ST_ANSWER:
+            case STEPS.ENTER_2ND_ANSWER:
+            case STEPS.ENTER_3RD_ANSWER:
+            case STEPS.ENTER_4TH_ANSWER:                    
+                constructModalWindow(systemMessages['T5'], systemMessages['CC2'](stepNumber), false);
                 okButton.classList.add('hidden');
                 break;
-            case 5:
-                constructModalWindow(systemMessages.T5, systemMessages.CC3, false);
+            case STEPS.ENTER_CORRECT_ANSWERS:
+                constructModalWindow(systemMessages['T5'], systemMessages['CC3'], false);
                 okButton.classList.add('hidden');
                 break;
         }
@@ -277,25 +296,25 @@ okButton.addEventListener('click', function () {
         
     } else {  // this condition handles valid entries to the textarea
         switch (stepNumber) {
-            case 0: // this step adds the question
+            case STEPS.ENTER_QUESTION: // this step adds the question
                 newQuestion['question'] = modalInput.value;
                 stepNumber++;
-                constructModalWindow(systemMessages.T6(stepNumber), systemMessages.CC8, true);
+                constructModalWindow(systemMessages['T6'](stepNumber), systemMessages['CC8'], true);
                 break;
-            case 1:
-            case 2:
-            case 3: // these steps add all but the last answer
+            case STEPS.ENTER_1ST_ANSWER:
+            case STEPS.ENTER_2ND_ANSWER:
+            case STEPS.ENTER_3RD_ANSWER: // these steps add all but the last answer
                 newQuestion.answers[stepNumber - 1] = modalInput.value;
                 stepNumber++;
-                constructModalWindow(systemMessages.T6(stepNumber), systemMessages.CC9, true);
+                constructModalWindow(systemMessages['T6'](stepNumber), systemMessages['CC9'], true);
                 break;
-            case 4: // last answer is added here
+            case STEPS.ENTER_4TH_ANSWER: // last answer is added here
                 newQuestion.answers[stepNumber - 1] = modalInput.value;
                 stepNumber++;
-                constructModalWindow(systemMessages.T7, systemMessages.CC10, true);
+                constructModalWindow(systemMessages['T7'], systemMessages['CC10'], true);
 
                 break;
-            case 5: // list of correct answers are added here
+            case STEPS.ENTER_CORRECT_ANSWERS: // list of correct answers are added here
                 let isCorrectOk = /^[1-4](,[1-4]){0,3}$/.test(modalInput.value); //validation of correct answers input
                 if (isCorrectOk) {
                     newQuestion.correct = modalInput.value.split(',');
@@ -309,7 +328,7 @@ okButton.addEventListener('click', function () {
                     hideModalVisibility();
                     questionSet.push(newQuestion);
                 } else {
-                    constructModalWindow(systemMessages.T5, systemMessages.CC6, false); // this shows an error if user included wrong symbols in the correct answers string 
+                    constructModalWindow(systemMessages['T5'], systemMessages['CC6'], false); // this shows an error if user included wrong symbols in the correct answers string 
                     okButton.classList.add('hidden');
                 }
                 break;
