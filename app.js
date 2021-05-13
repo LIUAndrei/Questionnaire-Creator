@@ -115,19 +115,21 @@ const constructModalWindow = function (title, message, textInputShown) {
 
     
     if (textInputShown) {
+        modalInput.value = '';
         modalInput.hidden = false;
+        modalInput.focus();
     } else {
         modalInput.hidden = true;
     }
-
-
 }
 
 
 // 4. below is the function that hides-shows the modal window
 
-let toggleModalVisibility = function(okShown) {
-    document.getElementById('modal').classList.toggle('hidden');
+
+
+let showModalVisibility = function(okShown) {
+    document.getElementById('modal').classList.remove('hidden');
     if (!okShown) {
         okButton.classList.add('hidden'); // some situations do not require both OK and Cancel buttons on the modal so I decided to hide OK when not in use
     } else {
@@ -135,12 +137,15 @@ let toggleModalVisibility = function(okShown) {
     }
 }
 
+let hideModalVisibility = function() {
+    document.getElementById('modal').classList.add('hidden');
+}
 
 
 // 5. below is an event handler for the 'cancel' button in the modal window + selection of 'OK' button
 
 const cancelButton = document.getElementById('cancel__button');
-cancelButton.addEventListener('click', toggleModalVisibility);
+cancelButton.addEventListener('click', hideModalVisibility);
 
 const okButton = document.getElementById('ok__button');
 
@@ -170,16 +175,16 @@ const determineResult = function (someQuestionsUnanswered, amountOfQuestionsPass
     if (someQuestionsUnanswered) {
         console.log('есть неотвеченные');
         constructModalWindow(systemMessages['T2'], systemMessages['CC4'], false);
-        toggleModalVisibility(false);
+        
     } else if (amountOfQuestionsPassed === questionSet.length) {
         console.log('всё правильно');
         constructModalWindow(systemMessages['T1'], systemMessages['CC5'](amountOfQuestionsPassed), false);
-        toggleModalVisibility(false);
+        
     } else {
         constructModalWindow(systemMessages['T3'], systemMessages['CC7'](amountOfQuestionsPassed, questionsNotPassed), false);
-        toggleModalVisibility(false);
-        console.log(questionsNotPassed);
+        
     }
+    showModalVisibility(false);
 }
 
 // 9. below is a function that wraps up the test and compares the result
@@ -224,18 +229,7 @@ const finishTestFunction = function () {
 finishTestButton.addEventListener('click', finishTestFunction);
 
 
-
-
-
-
-
-
-
-                    /* below goes the logic that handles new questions addition including both action and visual logic */
-
-
 // 11. below is the function that generates new questions from the modal window into questionSet array
-
 
 let stepNumber;
 
@@ -247,19 +241,16 @@ const addQuestion = function () {
         correct: []
     }
     constructModalWindow(systemMessages.T4, false, true);
-    modalInput.value = '';
-    modalInput.focus();
-    toggleModalVisibility(true);
-    
+
+    showModalVisibility(true);
 }
 
 
 // 12. below is an event handler for the 'add a question button'
 
-
-
 const addQuestionButton = document.getElementById('add-question');
 addQuestionButton.addEventListener('click', addQuestion);
+
 
 // 13. below is an event handler for the 'OK' button
 
@@ -288,8 +279,6 @@ okButton.addEventListener('click', function () {
         switch (stepNumber) {
             case 0: // this step adds the question
                 newQuestion['question'] = modalInput.value;
-                modalInput.value = '';
-                modalInput.focus();
                 stepNumber++;
                 constructModalWindow(systemMessages.T6(stepNumber), systemMessages.CC8, true);
                 break;
@@ -297,21 +286,17 @@ okButton.addEventListener('click', function () {
             case 2:
             case 3: // these steps add all but the last answer
                 newQuestion.answers[stepNumber - 1] = modalInput.value;
-                modalInput.value = '';
-                modalInput.focus();
                 stepNumber++;
                 constructModalWindow(systemMessages.T6(stepNumber), systemMessages.CC9, true);
                 break;
             case 4: // last answer is added here
                 newQuestion.answers[stepNumber - 1] = modalInput.value;
-                modalInput.value = '';
-                modalInput.focus();
                 stepNumber++;
                 constructModalWindow(systemMessages.T7, systemMessages.CC10, true);
 
                 break;
             case 5: // list of correct answers are added here
-                let isCorrectOk = /^([1-4],){1,3}[1-4]$/.test(modalInput.value); //validation of correct answers input
+                let isCorrectOk = /^[1-4](,[1-4]){0,3}$/.test(modalInput.value); //validation of correct answers input
                 if (isCorrectOk) {
                     newQuestion.correct = modalInput.value.split(',');
                     newQuestion.correct = newQuestion['correct'].map(function(v) { return Number(v); });
@@ -321,19 +306,13 @@ okButton.addEventListener('click', function () {
                     for (let i = 0; i < newQuestion.correct.length; i++) {
                         newQuestion.correct[i] = newQuestion.correct[i] - 1;
                     }
+                    hideModalVisibility();
+                    questionSet.push(newQuestion);
                 } else {
                     constructModalWindow(systemMessages.T5, systemMessages.CC6, false); // this shows an error if user included wrong symbols in the correct answers string 
                     okButton.classList.add('hidden');
-                    return;
                 }
-                
-
-                console.log(newQuestion);
-                questionSet.push(newQuestion);
-                toggleModalVisibility(false);
                 break;
-        }
-            
+        }       
     }
-    
 })

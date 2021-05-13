@@ -21,15 +21,15 @@ const systemMessages = {
     CC3: 'Вы не ввели правильные варианты ответов. Попробуйте добавить вопрос заново.',
     CC4: 'Все вопросы должны иметь хотя бы один выбранный вариант ответа. Проверьте правильность заполнения.',
     CC5(amountOfQuestionsPassed) {
-        return 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + defaultQuestions.length + ' . Вы молодец!';
+        return 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + questionSet.length + ' . Вы молодец!';
     },
     CC6: 'Поле может содержать только уникальные цифры 1, 2, 3, 4, разделенные запятой. Попробуйте добавить вопрос заново.',
     CC7(amountOfQuestionsPassed, questionsNotPassed) {
         let questionListToDisplay = '';
         for (var i = 0; i < questionsNotPassed.length; i++) {
-            questionListToDisplay = questionListToDisplay + (questionsNotPassed[i] + 1) + '. ' + defaultQuestions[questionsNotPassed[i]].question + ' <br> ';
+            questionListToDisplay = questionListToDisplay + (questionsNotPassed[i] + 1) + '. ' + questionSet[questionsNotPassed[i]].question + ' <br> ';
         }
-        questionListToDisplay = questionListToDisplay + 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + defaultQuestions.length + '. ';
+        questionListToDisplay = questionListToDisplay + 'Ваш результат ' + amountOfQuestionsPassed + ' из ' + questionSet.length + '. ';
         return questionListToDisplay;
     
     },
